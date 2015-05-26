@@ -53,7 +53,19 @@ Otros útiles
   uname -a → mostrar la información completa<br>
   lsb_release -a → mostrar la información completa de la distribución<br>
   cat /etc/issue → mostrar el nombre de la distribución
-  dmidecode -q → mostrar los componentes (hardware) del sistema<br>
+  dmidecode  componentes (hardware) del sistema<br>
+	Fabricante del equipo:
+	dmidecode -s system-manufacturer
+	Nombre del producto:
+	dmidecode -s system-product-name
+	Versión del producto:
+	dmidecode -s system-version
+	Número de serie del equipo:
+	dmidecode -s system-serial-number
+	SKU (Stock Keeping Unit) ó P/N (Part Number) del producto:
+	dmidecode | grep -i sku
+	Más información detallada:
+	dmidecode
   hdparm -i /dev/hda → mostrar las características de un disco duro<br>
   hdparm -tT /dev/sda → realizar prueba de lectura en un disco duro<br>
   cat /proc/cpuinfo → mostrar información de la CPU<br>
