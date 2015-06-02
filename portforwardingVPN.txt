@@ -1,0 +1,23 @@
+config rule
+        option src              wan
+        option dest_port        443
+        option target           ACCEPT
+        option proto            tcp
+
+config rule
+        option src              wan
+        option dest_port        992
+        option target           ACCEPT
+        option proto            tcp
+
+config rule
+        option src              wan
+        option dest_port        1194
+        option target           ACCEPT
+        option proto            tcp
+
+config rule
+        option src              wan
+        option dest_port        5555
+        option target           ACCEPT
+        option proto            tcp

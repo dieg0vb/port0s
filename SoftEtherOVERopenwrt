@@ -1,0 +1,48 @@
+
+##Instalacion de memoria USB externa y cambio de carpetas destino
+opkg update
+opkg install kmod-usb-storage block-mount kmod-fs-ext4
+mkswap /dev/sda1
+swapon /dev/sda1
+mkdir -p /mnt/share
+mount -t ext4 /dev/sda1 /mnt/usb -o rw,sync
+
+##Dependencias de softether
+opkg update
+opkg install zlib libpthread librt libreadline libncurses libiconv-full kmod-tun libopenssl
+
+##Descargar desde http://b.mikomoe.jp/
+cd /mnt/usb	
+wget http://b.mikomoe.jp/download/1428793731/attach/softethervpn_4.15-9546_ar71xx.ipk
+opkg install softethervpn*
+
+##Arrancar el servidor
+/usr/bin/env LANG=en_US.UTF-8 /usr/bin/vpnserver start
+
+##Comprobar que pasa los check en la subseccon 3 y ejecutar "check"
+/usr/bin/env LANG=en_US.UTF-8 /usr/bin/vpncmd
+(Pulsar 3)
+check
+
+##Si todo ok, configuramos un pass de gestion remoto
+/usr/bin/env LANG=en_US.UTF-8 /usr/bin/vpncmd
+(Pulsar 1)
+(pulsar ENTER)
+(pulsar ENTER)
+ServerPasswordSet
+(Introducimos password)
+(Repetimos password)
+exit
+
+##Habilitamos Softether VPN desde el arranque y usamos script GITHUB o local para añadir reglas al firewall, en esencia son los puertos TCP 443, 992, 1194, 5555 y UDP XXX
+
+/etc/init.d/softethervpnserver enable
+wget http://github.com/openwrt/portforward.txt -q -O - >> /etc/config/firewall
+/etc/init.d/firewall restart &
+
+##En PC remoto descargar el ultimo soft de VPN  (comprobar estado de Wine)
+wget http://www.softether-download.com/files/softether/v4.17-9562-beta-2015.05.30-tree/Windows/SoftEther_VPN_Server_and_VPN_Bridge/softether-vpnserver_vpnbridge-v4.17-9562-beta-2015.05.30-windows-x86_x64-intel.exe
+wine softether*
+(Instalará .net con mono y listo para configurar el HUB vpn al gusto)
+
+
