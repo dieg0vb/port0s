@@ -1,0 +1,24 @@
+hostname SP2
+ip host HQ 172.16.10.1 172.16.100.1 
+ip host Branch 172.16.20.1 172.16.200.1
+ip host SP1 10.0.1.1
+ip host SP2 10.0.2.1
+IP host SP3 10.0.3.1 
+interface loopback 0 
+ ip address 10.0.2.1 255.255.255.255 
+interface serial 0/0/0 
+ ip address 10.0.12.2 255.255.255.0 
+ no shutdown 
+interface serial 0/0/1 
+ ip address 10.0.23.2 255.255.255.0 
+ no shutdown
+router ospf 1 
+ network 10.0.2.0 0.0.0.255 area 0
+ network 10.0.12.0 0.0.0.255 area 0 
+ network 10.0.23.0 0.0.0.255 area 0 
+mpls ldp router-id loopback0 force 
+interface serial0/0/0 
+ mpls ip 
+interface serial0/0/1 
+ mpls ip 
+ 

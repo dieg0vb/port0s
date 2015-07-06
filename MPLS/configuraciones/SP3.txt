@@ -1,0 +1,54 @@
+hostname SP3
+ip host HQ 172.16.10.1 172.16.100.1 
+ip host Branch 172.16.20.1 172.16.200.1
+ip host SP1 10.0.1.1
+ip host SP2 10.0.2.1
+IP host SP3 10.0.3.1 
+! Paso 1. ConfiguracioN de Interfaces y Direccionamiento
+interface loopback 0 
+ ip address 10.0.3.1 255.255.255.255 
+interface serial 0/0/1 
+ ip address 10.0.23.3 255.255.255.0 
+ no shutdown 
+interface fastethernet 0/0
+ ip address 172.16.200.254 255.255.255.0 
+ no shutdown 
+! Paso 2. Enrutamiento
+ router ospf 1 
+ network 10.0.3.0 0.0.0.255 area 0
+ network 10.0.23.0 0.0.0.255 area 0
+! Paso 3. Activación de MPLS en la red del SP3
+mpls ldp router-id loopback0 force 
+interface serial0/0/1 
+ mpls ip 
+! Paso 4. Configuración de VPNs en MPLS
+ip vrf customer1
+ rd 100:1
+ route-target both 1:100
+interface fastethernet 0/0 
+ ip vrf forwarding customer1
+ ip address 172.16.200.254 255.255.255.0
+ no shut 
+ ! Paso 5. Configuración del enrutamiento PE-CE
+router eigrp 100
+ address-family ipv4 vrf customer1 
+  autonomous-system 1 
+  no auto-summary 
+  network 172.16.0.0
+! Paso 6. Configuración de MP-BGP
+router bgp 100 
+ neighbor 10.0.1.1 remote-as 100 
+ neighbor 10.0.1.1 update-source loopback0
+ address-family vpnv4  
+  neighbor 10.0.1.1 activate 
+  neighbor 10.0.1.1 send-community both 
+ exit 
+ address-family ipv4 vrf customer1 
+  redistribute eigrp 1 
+  exit 
+ exit 
+ router eigrp 100 
+  address-family ipv4 vrf customer1 
+  redistribute bgp 100 metric 64 1000 255 1 1500
+ exit
+exit

@@ -1,0 +1,16 @@
+hostname Branch1
+ip host HQ 172.16.10.1 172.16.100.1 
+ip host Branch 172.16.20.1 172.16.200.1
+ip host SP1 10.0.1.1
+ip host SP2 10.0.2.1
+IP host SP3 10.0.3.1 
+! Paso 1.  Configuración del Direccionamiento IP
+interface loopback 0 
+ ip address 172.16.20.1 255.255.255.0 
+interface fastethernet 0/0
+ ip address 172.16.200.1 255.255.255.0 
+ no shutdown
+! Paso 2. Configuración del Enrutamiento CE-PE
+router eigrp 1 
+ no auto-summary 
+ network 172.16.0.0

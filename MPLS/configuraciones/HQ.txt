@@ -1,0 +1,12 @@
+﻿hostname HQ
+! Paso 1.  Configuración del Direccionamiento IP
+interface loopback 0 
+ ip address 172.16.10.1 255.255.255.0 
+interface fastethernet 0/0 
+ ip address 172.16.100.1 255.255.255.0 
+ no shutdown
+! Paso 2. Configuración del Enrutamiento CE-PE
+router eigrp 1 
+ no auto-summary 
+ network 172.16.0.0
+ 

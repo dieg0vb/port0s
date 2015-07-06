@@ -1,0 +1,3 @@
+Paso 1. Configuración del direccionamiento IP
+Paso 2. Configuración el enrutamiento en el Proveedor de Servicios
+Paso 3. Configuración MPLS en el dominio del Proveedor de Servicios
